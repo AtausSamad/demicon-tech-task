@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -55,10 +53,8 @@ public class RandomUserService {
     }
 
     private void adjustApplicationPropertiesIfNeeded() {
-        if(this.applicationProperties != null) {
-            if(this.applicationProperties.getUserSize() > 5000) {
-                this.applicationProperties.setUserSize(5000);
-            }
+        if(this.applicationProperties != null && this.applicationProperties.getUserSize() > 5000) {
+            this.applicationProperties.setUserSize(5000);
         }
     }
 
@@ -74,7 +70,6 @@ public class RandomUserService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
-            // check for maximum size provided in application.properties
             String url = this.applicationProperties.getUrl() + "/?results=" + this.applicationProperties.getUserSize();
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET,
                     entity, String.class);
